@@ -57,7 +57,7 @@ Reglas puras en `domain/alertRules.ts` sobre un snapshot (`repos/alerts.ts#build
 
 ## Seguridad
 - Credenciales: Llavero (Rust `keyring`), **write-only** desde la UI; `http_secure` valida HTTPS, host permitido por credencial, sin userinfo/puerto, sin redirecciones, encabezados de auth no sobreescribibles.
-- Comandos nativos: deny-by-default (manifest en `build.rs` + capability explícita). CSP sin `connect-src` externo, `freezePrototype`.
+- Comandos nativos: deny-by-default (manifest en `build.rs` + capability explícita). CSP sin `connect-src` externo. (`freezePrototype` está desactivado: rompe dependencias que asignan `valueOf`.)
 - Filesystem: solo carpetas elegidas en el diálogo nativo (se rechazan `~` y `/`); lectura de archivos < 64 KB; sin symlinks; sin ejecución de git ni comandos; credenciales en remotes Git se eliminan.
 - Adjuntos copiados a la carpeta privada de la app; nombres validados.
 - Errores de proveedores sanitizados antes de guardarse (`runner.ts#sanitize`).
