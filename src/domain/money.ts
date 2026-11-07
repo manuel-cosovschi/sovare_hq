@@ -61,7 +61,8 @@ export function parseAmount(input: string | number): number {
   } else if (lastDot > -1) {
     const dots = (s.match(/\./g) || []).length;
     const decimals = s.length - lastDot - 1;
-    if (dots > 1 || (decimals === 3 && dots === 1 && s.length > 4)) s = s.replace(/\./g, "");
+    // "1.500" = 1500 (es-AR thousands), but "0.500" = 0.5: a leading zero can't start a thousands group
+    if (dots > 1 || (decimals === 3 && dots === 1 && s.length > 4 && !s.startsWith("0."))) s = s.replace(/\./g, "");
   }
   if (!/^\d*\.?\d*$/.test(s) || s === "" || s === ".") return NaN;
   const n = Number(s);

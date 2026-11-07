@@ -1,15 +1,17 @@
-# Produces an unsigned universal Sovare HQ.app + .dmg on a GitHub macOS runner.
-# Run it manually (Actions → "Build macOS app" → Run workflow) or push a tag v*.
+# Builds Sovare HQ for macOS (universal: Apple Silicon + Intel) on a GitHub macOS runner.
+# - Manual run (Actions → "Build macOS app" → Run workflow): uploads the .dmg as a build artifact.
+# - Tag push (v*): also publishes a GitHub Release with Sovare-HQ.dmg, used by scripts/install.sh.
 name: Build macOS app
 on:
   workflow_dispatch:
   push:
     tags: ["v*"]
 permissions:
-  contents: read
+  contents: write
 jobs:
   macos:
     runs-on: macos-14
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,10 +20,28 @@ jobs:
         with: { targets: "aarch64-apple-darwin,x86_64-apple-darwin" }
       - run: npm ci
       - run: npm run check
-      - run: npx tauri build --target universal-apple-darwin
+      - name: Build universal .app and .dmg (ad-hoc signed)
+        run: npx tauri build --target universal-apple-darwin
+      - name: Rust tests
+        run: cargo test --target aarch64-apple-darwin
+        working-directory: src-tauri
+      - name: Collect release files
+        run: |
+          set -euo pipefail
+          B=src-tauri/target/universal-apple-darwin/release/bundle
+          mkdir -p out
+          cp "$B"/dmg/*.dmg out/Sovare-HQ.dmg
+          ditto -c -k --keepParent "$B/macos/Sovare HQ.app" out/Sovare-HQ.app.zip
+          codesign --verify --deep --verbose=2 "$B/macos/Sovare HQ.app"
+          lipo -info "$B/macos/Sovare HQ.app/Contents/MacOS/sovare-hq"
+          (cd out && shasum -a 256 Sovare-HQ.dmg Sovare-HQ.app.zip > SHA256SUMS.txt)
+          ls -la out
       - uses: actions/upload-artifact@v4
         with:
           name: sovare-hq-macos
-          path: |
-            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
-            src-tauri/target/universal-apple-darwin/release/bundle/macos/*.app
+          path: out/
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" out/Sovare-HQ.dmg out/Sovare-HQ.app.zip out/SHA256SUMS.txt --title "Sovare HQ ${GITHUB_REF_NAME#v}" --notes-file .github/RELEASE_NOTES.md

@@ -21,7 +21,7 @@
 
 ## Datos y cálculos
 - Monedas soportadas en la UI: ARS y USD (otras importadas se guardan y muestran por separado, sin conversión salvo tipo de cambio cargado).
-- `parseAmount("0.500")` se interpreta como 500 (punto como separador de miles, criterio es-AR). Revisar la vista previa del CSV.
+- Importes como `1.500` se interpretan como 1500 (punto = separador de miles, criterio es-AR); `0.500` sí se lee como 0,5. Revisá la vista previa del CSV ante formatos ambiguos.
 - Costos recurrentes con vencimiento día 29–31 se ajustan al último día del mes y luego quedan en ese día (31 ene → 28 feb → 28 mar).
 - MRR de Stripe no descuenta cupones/descuentos.
 - Clientes/suscripciones de negocio se representan como métricas (`metric_observations`), no como tablas propias.

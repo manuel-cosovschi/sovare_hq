@@ -34,12 +34,13 @@ npm run check          # typecheck + lint + 207 tests
 
 ### Instalar en tu Mac
 
+En **Terminal**:
+
 ```bash
-./scripts/build-mac.sh          # genera src-tauri/target/release/bundle/{macos/Sovare HQ.app, dmg/*.dmg}
-./scripts/install-mac.sh        # copia la app a /Applications
+curl -fsSL https://raw.githubusercontent.com/manuel-cosovschi/sovare_hq/claude/wonderful-johnson-ysh44e/scripts/install.sh | bash
 ```
 
-O sin Mac de compilación: GitHub → Actions → **Build macOS app** → *Run workflow* → descargá el artefacto `.dmg` (build universal, sin firmar). Ver [docs/SETUP.md](docs/SETUP.md).
+Descarga el último Release (`.dmg` universal, Apple Silicon + Intel), verifica el checksum, instala *Sovare HQ* en Aplicaciones y la abre. Para actualizar, repetí el comando: tus datos se conservan. También podés descargar el `.dmg` desde la página de [Releases](https://github.com/manuel-cosovschi/sovare_hq/releases) o compilar localmente con `./scripts/build-mac.sh && ./scripts/install-mac.sh`. Ver [docs/SETUP.md](docs/SETUP.md).
 
 ## Documentación
 

@@ -25,6 +25,8 @@ describe("parseAmount", () => {
 
   it("passes numbers through", () => {
     expect(parseAmount(12.3)).toBe(12.3);
+    expect(parseAmount("0.500")).toBeCloseTo(0.5, 10);
+    expect(parseAmount("1.500")).toBe(1500);
   });
 });
 

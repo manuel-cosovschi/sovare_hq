@@ -2,6 +2,14 @@
 
 ## 1. Instalar la app en tu Mac
 
+**Opción recomendada — un comando** (Terminal):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/manuel-cosovschi/sovare_hq/claude/wonderful-johnson-ysh44e/scripts/install.sh | bash
+```
+
+Descarga el `.dmg` del último Release (compilado en una Mac de GitHub Actions), verifica su SHA-256, lo instala en Aplicaciones y abre la app. Repetilo para actualizar.
+
 **Opción A — compilar en tu Mac** (macOS 11+, Xcode Command Line Tools, Node 20+, Rust):
 
 ```bash
@@ -12,9 +20,9 @@ git clone <este repo> && cd sovare_hq
 ./scripts/install-mac.sh                      # copia a /Applications
 ```
 
-**Opción B — GitHub Actions:** Actions → *Build macOS app* → *Run workflow*. Descargá el artefacto (`.dmg`), abrilo y arrastrá *Sovare HQ* a Aplicaciones.
+**Opción B — GitHub Actions:** Actions → *Build macOS app* → *Run workflow* (o un tag `v*`, que además publica un Release). Descargá el `.dmg`, abrilo y arrastrá *Sovare HQ* a Aplicaciones.
 
-La app no está firmada con un Developer ID: la primera vez abrila con clic derecho → *Abrir* (o usá `install-mac.sh`, que quita la cuarentena).
+La app tiene firma ad-hoc pero no un Developer ID de Apple: si la instalás arrastrando desde el `.dmg` descargado con el navegador, la primera vez abrila con clic derecho → *Abrir* (macOS 15: Ajustes → Privacidad y seguridad → *Abrir de todos modos*). El comando de instalación evita ese paso.
 
 Después de instalar: aparece en Launchpad, Spotlight (“Sovare HQ”) y podés fijarla en el Dock. Cerrar la ventana la deja en la barra de menú (ícono del isotipo); *Salir* desde ese menú la cierra.
 
