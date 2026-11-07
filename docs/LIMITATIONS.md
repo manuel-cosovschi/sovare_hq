@@ -1,9 +1,9 @@
 # Registro de limitaciones reales
 
 ## Entrega y plataforma
-- **El `.app`/`.dmg` no se generó en esta sesión**: el entorno de desarrollo era Linux y un bundle de macOS solo se produce en macOS. Se entrega: código completo, `scripts/build-mac.sh`, `scripts/install-mac.sh` y el workflow `Build macOS app` (GitHub Actions, runner macOS) para generarlo de forma reproducible.
-- Verificado en Linux: el shell Rust compila en release y pasan sus tests; el binario nativo arranca (WebKitGTK bajo Xvfb), muestra el onboarding y crea la base SQLite con las migraciones a través de los comandos Rust; la UI completa se probó en Chromium con el adaptador web (E2E con capturas). **No** se ejecutó dentro de WKWebView en macOS: validar en la primera compilación local (titlebar overlay, Llavero, notificaciones, tray).
-- La app no está firmada ni notarizada (requiere Apple Developer ID). Gatekeeper pide confirmación la primera vez.
+- El `.app`/`.dmg` universal se compila en GitHub Actions (runner macOS) y se publica como Release (`v0.1.0`); se instala con `scripts/install.sh`. En CI pasan los tests, `codesign --verify` (firma ad-hoc) y `lipo` (arm64 + x86_64).
+- Verificado en Linux: el shell Rust compila en release y pasan sus tests; el binario nativo arranca (WebKitGTK bajo Xvfb), muestra el onboarding y crea la base SQLite con las migraciones a través de los comandos Rust; la UI completa se probó en Chromium con el adaptador web (E2E con capturas). La app no se abrió de forma interactiva en una Mac durante el desarrollo: en el primer uso revisá barra de título, Llavero, notificaciones y menú de la barra.
+- Firma ad-hoc, sin Developer ID ni notarización (requiere cuenta paga de Apple). Instalando con `scripts/install.sh` no aparece el aviso de Gatekeeper; si arrastrás el `.dmg` bajado con el navegador, la primera vez hay que abrirla con clic derecho → *Abrir*.
 - Sin auto-updater todavía: actualizar = reinstalar el `.app`; los datos se conservan porque viven fuera del bundle y las migraciones son versionadas.
 
 ## Monitoreo y automatizaciones
