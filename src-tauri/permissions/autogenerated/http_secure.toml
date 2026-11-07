@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-http-secure"
+description = "Enables the http_secure command without any pre-configured scope."
+commands.allow = ["http_secure"]
+
+[[permission]]
+identifier = "deny-http-secure"
+description = "Denies the http_secure command without any pre-configured scope."
+commands.deny = ["http_secure"]

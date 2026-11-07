@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-db-exec-script"
+description = "Enables the db_exec_script command without any pre-configured scope."
+commands.allow = ["db_exec_script"]
+
+[[permission]]
+identifier = "deny-db-exec-script"
+description = "Denies the db_exec_script command without any pre-configured scope."
+commands.deny = ["db_exec_script"]

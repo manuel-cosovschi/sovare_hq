@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-db-restore"
+description = "Enables the db_restore command without any pre-configured scope."
+commands.allow = ["db_restore"]
+
+[[permission]]
+identifier = "deny-db-restore"
+description = "Denies the db_restore command without any pre-configured scope."
+commands.deny = ["db_restore"]

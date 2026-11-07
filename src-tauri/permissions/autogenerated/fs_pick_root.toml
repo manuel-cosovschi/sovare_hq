@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-fs-pick-root"
+description = "Enables the fs_pick_root command without any pre-configured scope."
+commands.allow = ["fs_pick_root"]
+
+[[permission]]
+identifier = "deny-fs-pick-root"
+description = "Denies the fs_pick_root command without any pre-configured scope."
+commands.deny = ["fs_pick_root"]
