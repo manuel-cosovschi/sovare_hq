@@ -1,12 +1,17 @@
 # Builds Sovare HQ for macOS (universal: Apple Silicon + Intel) on a GitHub macOS runner.
 # Every run uploads the build as an artifact and publishes/updates the GitHub Release
 # v<package.json version> with Sovare-HQ.dmg (used by scripts/install.sh).
-# Trigger: Actions → "Build macOS app" → Run workflow, or push a tag v*.
+# Triggers: pushes to the app branch (code changes), tags v*, or Actions → "Build macOS app" → Run workflow.
 name: Build macOS app
 on:
   workflow_dispatch:
   push:
     tags: ["v*"]
+    branches: [claude/wonderful-johnson-ysh44e]
+    paths-ignore: ["**/*.md", "docs/**"]
+concurrency:
+  group: macos-release
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
