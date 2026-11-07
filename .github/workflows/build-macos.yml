@@ -1,6 +1,7 @@
 # Builds Sovare HQ for macOS (universal: Apple Silicon + Intel) on a GitHub macOS runner.
-# - Manual run (Actions → "Build macOS app" → Run workflow): uploads the .dmg as a build artifact.
-# - Tag push (v*): also publishes a GitHub Release with Sovare-HQ.dmg, used by scripts/install.sh.
+# Every run uploads the build as an artifact and publishes/updates the GitHub Release
+# v<package.json version> with Sovare-HQ.dmg (used by scripts/install.sh).
+# Trigger: Actions → "Build macOS app" → Run workflow, or push a tag v*.
 name: Build macOS app
 on:
   workflow_dispatch:
@@ -41,7 +42,13 @@ jobs:
           name: sovare-hq-macos
           path: out/
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" out/Sovare-HQ.dmg out/Sovare-HQ.app.zip out/SHA256SUMS.txt --title "Sovare HQ ${GITHUB_REF_NAME#v}" --notes-file .github/RELEASE_NOTES.md
+        run: |
+          set -euo pipefail
+          TAG="v$(node -p "require('./package.json').version")"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" out/Sovare-HQ.dmg out/Sovare-HQ.app.zip out/SHA256SUMS.txt --clobber
+          else
+            gh release create "$TAG" out/Sovare-HQ.dmg out/Sovare-HQ.app.zip out/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Sovare HQ ${TAG#v}" --notes-file .github/RELEASE_NOTES.md --latest
+          fi
